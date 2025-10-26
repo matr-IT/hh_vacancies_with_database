@@ -40,4 +40,3 @@ def auto_create_tables():
     finally:
         if conn:
             conn.close()
-auto_create_tables()
