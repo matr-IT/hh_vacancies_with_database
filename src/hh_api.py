@@ -87,7 +87,7 @@ class HHApiVacancies(HHApiAbstract):
                 self.__vacancies.extend(vacancies)
             else:
                 return "Возникла ошибка запроса"
-        return (self.__vacancies)
+        return self.__vacancies
 
 
 

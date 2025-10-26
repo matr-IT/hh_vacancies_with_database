@@ -29,7 +29,8 @@ def auto_create_tables():
             salary INTEGER,
             short_description TEXT,
             employer_id INTEGER NOT NULL,
-            FOREIGN KEY (employer_id) REFERENCES employers (id) ON DELETE CASCADE
+            FOREIGN KEY (employer_id) REFERENCES employers (id) ON DELETE CASCADE,
+            url VARCHAR(255) NOT NULL
             )""")
         conn.commit()
         cur.close()
@@ -40,3 +41,5 @@ def auto_create_tables():
     finally:
         if conn:
             conn.close()
+
+auto_create_tables()
