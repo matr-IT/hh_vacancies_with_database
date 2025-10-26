@@ -24,7 +24,7 @@ def auto_create_db():
         cur = conn.cursor()
 
         # Выполняем команду CREATE DATABASE
-        cur.execute("CREATE DATABASE IF NOT EXISTS hh_employers_vacancies;")
+        cur.execute("CREATE DATABASE hh_employers_vacancies;")
 
         cur.close()
         print("База данных 'hh_employers_vacancies' успешно создана.")
