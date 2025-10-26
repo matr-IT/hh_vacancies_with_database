@@ -1,5 +1,4 @@
-from abc import ABC, abstractmethod
-from itertools import cycle
+from abc import ABC
 
 import requests
 
@@ -14,7 +13,7 @@ class HHApiAbstract(ABC):
 
 class HHApiEmployers(HHApiAbstract):
     """
-    Класс для работы с API HeadHunter - получение списка работодателей
+    Класс для работы с API HeadHunter - получение данных работодателей по их id
     """
 
     def __init__(self):
@@ -52,7 +51,7 @@ class HHApiEmployers(HHApiAbstract):
 
 class HHApiVacancies(HHApiAbstract):
     """
-    Класс для работы с API HeadHunter - получение списка вакансий по id работодателя
+    Класс для работы с API HeadHunter - получение списков вакансий по id работодателей
     """
 
     def __init__(self):
@@ -76,7 +75,7 @@ class HHApiVacancies(HHApiAbstract):
 
     def load_vacancies(self):
         """
-        Получение вакансий через API HH по id компании-работодателя
+        Получение вакансий через API HH по id компаний-работодателей
         """
         for i in self.__employers_ids:
             self.__params["employer_id"] = str(i)
