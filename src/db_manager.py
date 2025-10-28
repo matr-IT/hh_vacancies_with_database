@@ -105,3 +105,162 @@ class DBManager(DBManagerAbstract):
             self.conn.rollback()
             print(f"Ошибка при добавлении вакансий: {e}")
             raise
+
+    def get_companies_and_vacancies_count(self) -> list[dict]:
+        """
+        Получает список всех компаний и количество вакансий у каждой компании
+        """
+        try:
+            self.cur.execute(
+                """
+                SELECT e.name, COUNT(v.id) as vacancies_count
+                FROM employers e
+                LEFT JOIN vacancies v ON e.id = v.employer_id
+                GROUP BY e.id, e.name
+                ORDER BY vacancies_count DESC
+            """
+            )
+
+            result = []
+            for row in self.cur.fetchall():
+                result.append({"company_name": row[0], "vacancies_count": row[1]})
+
+            return result
+
+        except Exception as e:
+            print(f"Ошибка при получении списка компаний: {e}")
+            return []
+
+    def get_all_vacancies(self) -> list[dict]:
+        """
+        Получает список всех вакансий с указанием названия компании,
+        названия вакансии, зарплаты и ссылки на вакансию
+        """
+        try:
+            self.cur.execute(
+                """
+                SELECT e.name as company_name, v.name as vacancy_name, 
+                       v.salary, v.url
+                FROM vacancies v
+                JOIN employers e ON v.employer_id = e.id
+                ORDER BY e.name, v.salary DESC NULLS LAST
+            """
+            )
+
+            result = []
+            for row in self.cur.fetchall():
+                result.append(
+                    {
+                        "company_name": row[0],
+                        "vacancy_name": row[1],
+                        "salary": row[2],
+                        "url": row[3],
+                    }
+                )
+
+            return result
+
+        except Exception as e:
+            print(f"Ошибка при получении списка вакансий: {e}")
+            return []
+
+    def get_avg_salary(self) -> float:
+        """
+        Получает среднюю зарплату по вакансиям
+        """
+        try:
+            self.cur.execute(
+                """
+                SELECT AVG(salary) as avg_salary
+                FROM vacancies
+                WHERE salary IS NOT NULL AND salary > 0
+            """
+            )
+
+            result = self.cur.fetchone()
+            return round(float(result[0]), 2) if result and result[0] else 0.0
+
+        except Exception as e:
+            print(f"Ошибка при расчете средней зарплаты: {e}")
+            return 0.0
+
+    def get_vacancies_with_higher_salary(self) -> list[dict]:
+        """
+        Получает список всех вакансий, у которых зарплата выше средней по всем вакансиям
+        """
+        try:
+            avg_salary = self.get_avg_salary()
+
+            self.cur.execute(
+                """
+                SELECT e.name as company_name, v.name as vacancy_name, 
+                       v.salary, v.url
+                FROM vacancies v
+                JOIN employers e ON v.employer_id = e.id
+                WHERE v.salary > %s
+                ORDER BY v.salary DESC
+            """,
+                (avg_salary,),
+            )
+
+            result = []
+            for row in self.cur.fetchall():
+                result.append(
+                    {
+                        "company_name": row[0],
+                        "vacancy_name": row[1],
+                        "salary": row[2],
+                        "url": row[3],
+                    }
+                )
+
+            return result
+
+        except Exception as e:
+            print(f"Ошибка при получении вакансий с высокой зарплатой: {e}")
+            return []
+
+    def get_vacancies_with_keyword(self, keyword: str) -> list[dict]:
+        """
+        Получает список всех вакансий, в названии которых содержатся переданные слова
+        """
+        try:
+            # Используем ILIKE для регистронезависимого поиска
+            search_pattern = f"%{keyword}%"
+
+            self.cur.execute(
+                """
+                SELECT e.name as company_name, v.name as vacancy_name, 
+                       v.salary, v.url
+                FROM vacancies v
+                JOIN employers e ON v.employer_id = e.id
+                WHERE v.name ILIKE %s
+                ORDER BY e.name, v.salary DESC NULLS LAST
+            """,
+                (search_pattern,),
+            )
+
+            result = []
+            for row in self.cur.fetchall():
+                result.append(
+                    {
+                        "company_name": row[0],
+                        "vacancy_name": row[1],
+                        "salary": row[2],
+                        "url": row[3],
+                    }
+                )
+
+            return result
+
+        except Exception as e:
+            print(f"Ошибка при поиске вакансий по ключевому слову: {e}")
+            return []
+
+    def close_connection(self):
+        """Закрытие соединения с базой данных"""
+        if self.cur:
+            self.cur.close()
+        if self.conn:
+            self.conn.close()
+        print("Соединение с базой данных закрыто")
