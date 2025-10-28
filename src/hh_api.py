@@ -88,6 +88,3 @@ class HHApiVacancies(HHApiAbstract):
             else:
                 return "Возникла ошибка запроса"
         return self.__vacancies
-
-
-

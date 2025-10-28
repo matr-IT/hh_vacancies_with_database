@@ -11,19 +11,22 @@ class DBManagerAbstract(ABC):
     """
     Абстрактный класс менеджера БД
     """
+
     pass
+
 
 class DBManager(DBManagerAbstract):
     """
     Класс для работы с БД
     """
+
     def __init__(self):
         self.conn = psycopg2.connect(
-            dbname=os.getenv('db_hh'),
-            user=os.getenv('user_hh'),
-            password=os.getenv('password_hh'),
-            host=os.getenv('host_hh'),
-            port=os.getenv('port_hh'),
+            dbname=os.getenv("db_hh"),
+            user=os.getenv("user_hh"),
+            password=os.getenv("password_hh"),
+            host=os.getenv("host_hh"),
+            port=os.getenv("port_hh"),
         )
         self.cur = self.conn.cursor()
 
@@ -42,7 +45,7 @@ class DBManager(DBManagerAbstract):
                         name = EXCLUDED.name,
                         site_url = EXCLUDED.site_url
                     """,
-                    (employer['id'], employer['name'], employer['site_url'])
+                    (employer["id"], employer["name"], employer["site_url"]),
                 )
                 count += 1
 
@@ -65,11 +68,17 @@ class DBManager(DBManagerAbstract):
 
             for vacancy in vacancies_data:
                 # Проверяем наличие обязательных полей
-                required_fields = ['name', 'employer_id', 'url']
-                missing_fields = [field for field in required_fields if field not in vacancy or vacancy[field] is None]
+                required_fields = ["name", "employer_id", "url"]
+                missing_fields = [
+                    field
+                    for field in required_fields
+                    if field not in vacancy or vacancy[field] is None
+                ]
 
                 if missing_fields:
-                    print(f"Пропуск вакансии без обязательных полей {missing_fields}: {vacancy.get('name', 'Unknown')}")
+                    print(
+                        f"Пропуск вакансии без обязательных полей {missing_fields}: {vacancy.get('name', 'Unknown')}"
+                    )
                     skipped += 1
                     continue
 
@@ -79,12 +88,12 @@ class DBManager(DBManagerAbstract):
                     VALUES (%s, %s, %s, %s, %s)
                     """,
                     (
-                        vacancy['name'],
-                        vacancy.get('salary'),
-                        vacancy.get('short_description', ''),
-                        vacancy['employer_id'],
-                        vacancy['url']
-                    )
+                        vacancy["name"],
+                        vacancy.get("salary"),
+                        vacancy.get("short_description", ""),
+                        vacancy["employer_id"],
+                        vacancy["url"],
+                    ),
                 )
                 count += 1
 

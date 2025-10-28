@@ -11,11 +11,11 @@ def auto_create_db():
     try:
         # Создаем соединение с основной БД 'postgres'
         conn = psycopg2.connect(
-            dbname=os.getenv('dbname'),
-            user=os.getenv('user'),
-            password=os.getenv('password'),
-            host=os.getenv('host'),
-            port=os.getenv('port')
+            dbname=os.getenv("dbname"),
+            user=os.getenv("user"),
+            password=os.getenv("password"),
+            host=os.getenv("host"),
+            port=os.getenv("port"),
         )
 
         # Устанавливаем уровень изоляции для этого соединения в autocommit
@@ -34,7 +34,6 @@ def auto_create_db():
     finally:
         if conn:
             conn.close()
-
 
 
 auto_create_db()

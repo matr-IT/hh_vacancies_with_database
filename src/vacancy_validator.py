@@ -33,7 +33,6 @@ class Vacancies(VacanciesAbstract):
         self.__employer_id = employer_id
         self.__url = url
 
-
     def __validate_salary(self, salary_from_data) -> int:
         """
         Метод валидации зарплаты
@@ -92,7 +91,7 @@ class Vacancies(VacanciesAbstract):
                 "responsibility", ""
             ),
             employer_id=employer_id,
-            url = dict_vacancies.get("url")
+            url=dict_vacancies.get("url"),
         )
 
     def to_dict(self):
@@ -106,5 +105,3 @@ class Vacancies(VacanciesAbstract):
             "employer_id": self.__employer_id,
             "url": self.__url,
         }
-
-

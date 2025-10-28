@@ -1,16 +1,20 @@
 from abc import ABC
 
+
 class EmployerAbstract(ABC):
     """
     Абстрактный класс для валидации данных работодателей
     """
+
     pass
+
 
 class Employer(EmployerAbstract):
     """
     Класс для валидации данных работодателей
     """
-    __slots__ = ('__id', '__name', '__site_url')
+
+    __slots__ = ("__id", "__name", "__site_url")
 
     __id: int
     __name: str
@@ -30,7 +34,7 @@ class Employer(EmployerAbstract):
             id=dict_employers.get("id"),
             name=dict_employers.get("name"),
             site_url=dict_employers.get("site_url"),
-            )
+        )
 
     def to_dict(self):
         """

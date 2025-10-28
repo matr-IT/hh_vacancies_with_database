@@ -5,6 +5,7 @@ from src.employer_validator import Employer
 from src.vacancy_validator import Vacancies
 from src.db_manager import DBManager
 
+
 def user_interaction():
 
     # создаем БД
@@ -57,13 +58,5 @@ def user_interaction():
 
     bd_manager.insert_vacancies(vacancies_dicts)
 
+
 user_interaction()
-
-
-
-
-
-
-
-
-

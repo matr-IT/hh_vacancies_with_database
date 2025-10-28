@@ -63,7 +63,6 @@ class FileWorkerVacancy(ABC):
         pass
 
 
-
 class JsonFileWorkerVacancy(FileWorkerVacancy):
     """
     Класс для работы с JSON-файлами
