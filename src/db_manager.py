@@ -133,8 +133,7 @@ class DBManager(DBManagerAbstract):
 
     def get_all_vacancies(self) -> list[dict]:
         """
-        Получает список всех вакансий с указанием названия компании,
-        названия вакансии, зарплаты и ссылки на вакансию
+        получаем список всех вакансий
         """
         try:
             self.cur.execute(
@@ -166,7 +165,7 @@ class DBManager(DBManagerAbstract):
 
     def get_avg_salary(self) -> float:
         """
-        Получает среднюю зарплату по вакансиям
+        получаем среднюю зп по вакансиям
         """
         try:
             self.cur.execute(
@@ -186,7 +185,7 @@ class DBManager(DBManagerAbstract):
 
     def get_vacancies_with_higher_salary(self) -> list[dict]:
         """
-        Получает список всех вакансий, у которых зарплата выше средней по всем вакансиям
+        получаем вакансии с зп выше средней
         """
         try:
             avg_salary = self.get_avg_salary()
@@ -222,10 +221,9 @@ class DBManager(DBManagerAbstract):
 
     def get_vacancies_with_keyword(self, keyword: str) -> list[dict]:
         """
-        Получает список всех вакансий, в названии которых содержатся переданные слова
+        Получаем вакансии по ключевому слову
         """
         try:
-            # Используем ILIKE для регистронезависимого поиска
             search_pattern = f"%{keyword}%"
 
             self.cur.execute(
@@ -258,7 +256,7 @@ class DBManager(DBManagerAbstract):
             return []
 
     def close_connection(self):
-        """Закрытие соединения с базой данных"""
+        """Закрывает БД"""
         if self.cur:
             self.cur.close()
         if self.conn:
