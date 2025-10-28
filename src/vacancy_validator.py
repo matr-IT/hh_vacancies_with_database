@@ -81,14 +81,18 @@ class Vacancies(VacanciesAbstract):
         """
         Метод преобразования словаря в экземпляр класса
         """
+
+        employer_info = dict_vacancies.get("employer", {})
+        employer_id = employer_info.get("id") if employer_info else None
+
         return cls(
-            name=dict_vacancies.get("name", ""),
+            name=dict_vacancies.get("name"),
             salary=dict_vacancies.get("salary"),
             short_description=dict_vacancies.get("snippet", {}).get(
                 "responsibility", ""
             ),
-            employer_id=dict_vacancies.get("employer_id", ""),
-            url = dict_vacancies.get("url", "")
+            employer_id=employer_id,
+            url = dict_vacancies.get("url")
         )
 
     def to_dict(self):
@@ -103,5 +107,4 @@ class Vacancies(VacanciesAbstract):
             "url": self.__url,
         }
 
-    def __str__(self):
-        return f"Название: {self.__name}\nСсылка на вакансию: {self.__url}\nЗарплата: {self.__salary/100}"
+
